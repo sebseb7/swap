@@ -47,7 +47,9 @@ set(crypto_sources
   skein.c
   slow-hash.c
   CryptonightR_JIT.c
-  tree-hash.c)
+  tree-hash.c
+  cn_slow_hash_soft.cpp
+  cn_slow_hash_hard_intel.cpp)
 
 if(ARCH_ID STREQUAL "i386" OR ARCH_ID STREQUAL "x86_64" OR ARCH_ID STREQUAL "x86-64" OR ARCH_ID STREQUAL "amd64")
 list(APPEND crypto_sources CryptonightR_template.S)
@@ -75,7 +77,8 @@ set(crypto_private_headers
   skein.h
   skein_port.h
   CryptonightR_JIT.h
-  CryptonightR_template.h)
+  CryptonightR_template.h
+  cn_slow_hash.hpp)
 
 monero_private_headers(cncrypto
   ${crypto_private_headers})
