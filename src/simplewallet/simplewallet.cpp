@@ -121,7 +121,7 @@ typedef cryptonote::simple_wallet sw;
 
 #define SCOPED_WALLET_UNLOCK() SCOPED_WALLET_UNLOCK_ON_BAD_PASSWORD(return true;)
 
-#define PRINT_USAGE(usage_help_advanced) fail_msg_writer() << boost::format(tr("usage: %s")) % usage_help_advanced;
+#define PRINT_USAGE(usage_help) fail_msg_writer() << boost::format(tr("usage: %s")) % usage_help;
 
 #define LONG_PAYMENT_ID_SUPPORT_CHECK() \
   do { \
@@ -250,6 +250,7 @@ namespace
   const char* USAGE_MMS_SET("mms set <option_name> [<option_value>]");
   const char* USAGE_MMS_SEND_SIGNER_CONFIG("mms send_signer_config");
   const char* USAGE_MMS_START_AUTO_CONFIG("mms start_auto_config [<label> <label> ...]");
+  const char* USAGE_MMS_CONFIG_CHECKSUM("mms config_checksum");
   const char* USAGE_MMS_STOP_AUTO_CONFIG("mms stop_auto_config");
   const char* USAGE_MMS_AUTO_CONFIG("mms auto_config <auto_config_token>");
   const char* USAGE_PRINT_RING("print_ring <key_image> | <txid>");
@@ -270,8 +271,7 @@ namespace
   const char* USAGE_START_MINING_FOR_RPC("start_mining_for_rpc");
   const char* USAGE_STOP_MINING_FOR_RPC("stop_mining_for_rpc");
   const char* USAGE_VERSION("version");
-  const char* USAGE_HELP_ADVANCED("help_advanced [<command>]");
-  const char* USAGE_HELP("help");
+  const char* USAGE_HELP("help [<command>]");
 
   std::string input_line(const std::string& prompt, bool yesno = false)
   {
@@ -2308,7 +2308,7 @@ bool simple_wallet::on_unknown_command(const std::vector<std::string> &args)
 {
   if (args[0] == "exit" || args[0] == "q") // backward compat
     return false;
-  fail_msg_writer() << boost::format(tr("Unknown command '%s', try 'help_advanced'")) % args.front();
+  fail_msg_writer() << boost::format(tr("Unknown command '%s', try 'help'")) % args.front();
   return true;
 }
 
@@ -3037,37 +3037,13 @@ bool simple_wallet::set_export_format(const std::vector<std::string> &args/* = s
 
 bool simple_wallet::help(const std::vector<std::string> &args/* = std::vector<std::string>()*/)
 {
-  message_writer() << "";
-  message_writer() << tr("Commands:");
-  message_writer() << "";
-  message_writer() << tr("\"welcome\" - Read welcome message.");
-  message_writer() << tr("\"donate <amount>\" - Donate XMR to the development team.");
-  message_writer() << tr("\"balance\" - Show balance.");
-  message_writer() << tr("\"address new\" - Create new subaddress.");
-  message_writer() << tr("\"address all\" - Show all addresses.");
-  message_writer() << tr("\"transfer <address> <amount>\" - Send XMR to an address.");
-  message_writer() << tr("\"show_transfers [in|out|pending|failed|pool]\" - Show transactions.");
-  message_writer() << tr("\"sweep_all <address>\" - Send whole balance to another wallet.");
-  message_writer() << tr("\"seed\" - Show secret 25 words that can be used to recover this wallet.");
-  message_writer() << tr("\"refresh\" - Synchronize wallet with the Monero network.");
-  message_writer() << tr("\"status\" - Check current status of wallet.");
-  message_writer() << tr("\"version\" - Check software version.");
-  message_writer() << tr("\"help_advanced\" - Show list with more available commands.");
-  message_writer() << tr("\"save\" - Save wallet.");
-  message_writer() << tr("\"exit\" - Exit wallet.");
-  message_writer() << "";
-  return true;
-}
-
-bool simple_wallet::help_advanced(const std::vector<std::string> &args/* = std::vector<std::string>()*/)
-{
   if(args.empty())
   {
     success_msg_writer() << get_commands_str();
   }
   else if ((args.size() == 2) && (args.front() == "mms"))
   {
-    // Little hack to be able to do "help_advanced mms <subcommand>"
+    // Little hack to be able to do "help mms <subcommand>"
     std::vector<std::string> mms_args(1, args.front() + " " + args.back());
     success_msg_writer() << get_command_usage(mms_args);
   }
@@ -3460,8 +3436,8 @@ simple_wallet::simple_wallet()
                            tr("Interface with the MMS (Multisig Messaging System)\n"
                               "<subcommand> is one of:\n"
                               "  init, info, signer, list, next, sync, transfer, delete, send, receive, export, note, show, set, help\n"
-                              "  send_signer_config, start_auto_config, stop_auto_config, auto_config\n"
-                              "Get help about a subcommand with: help_advanced mms <subcommand>"));
+                              "  send_signer_config, start_auto_config, stop_auto_config, auto_config, config_checksum\n"
+                              "Get help about a subcommand with: help mms <subcommand>, or mms help <subcommand>"));
   m_cmd_binder.set_handler("mms init",
                            boost::bind(&simple_wallet::on_command, this, &simple_wallet::mms, _1),
                            tr(USAGE_MMS_INIT),
@@ -3529,6 +3505,10 @@ simple_wallet::simple_wallet()
                            boost::bind(&simple_wallet::on_command, this, &simple_wallet::mms, _1),
                            tr(USAGE_MMS_START_AUTO_CONFIG),
                            tr("Start auto-config at the auto-config manager's wallet by issuing auto-config tokens and optionally set others' labels"));
+  m_cmd_binder.set_handler("mms config_checksum",
+                           boost::bind(&simple_wallet::on_command, this, &simple_wallet::mms, _1),
+                           tr(USAGE_MMS_CONFIG_CHECKSUM),
+                           tr("Get a checksum that allows signers to easily check for identical MMS configuration"));
   m_cmd_binder.set_handler("mms stop_auto_config",
                            boost::bind(&simple_wallet::on_command, this, &simple_wallet::mms, _1),
                            tr(USAGE_MMS_STOP_AUTO_CONFIG),
@@ -3611,14 +3591,10 @@ simple_wallet::simple_wallet()
                            boost::bind(&simple_wallet::stop_mining_for_rpc, this, _1),
                            tr(USAGE_STOP_MINING_FOR_RPC),
                            tr("Stop mining to pay for RPC access"));
-  m_cmd_binder.set_handler("help_advanced",
-                           boost::bind(&simple_wallet::on_command, this, &simple_wallet::help_advanced, _1),
-                           tr(USAGE_HELP_ADVANCED),
-                           tr("Show the help section or the documentation about a <command>."));
   m_cmd_binder.set_handler("help",
                            boost::bind(&simple_wallet::on_command, this, &simple_wallet::help, _1),
                            tr(USAGE_HELP),
-                           tr("Show simplified list of available commands."));
+                           tr("Show the help section or the documentation about a <command>."));
   m_cmd_binder.set_unknown_command_handler(boost::bind(&simple_wallet::on_command, this, &simple_wallet::on_unknown_command, _1));
   m_cmd_binder.set_empty_command_handler(boost::bind(&simple_wallet::on_empty_command, this));
   m_cmd_binder.set_cancel_handler(boost::bind(&simple_wallet::on_cancelled_command, this));
@@ -4770,9 +4746,8 @@ boost::optional<epee::wipeable_string> simple_wallet::new_wallet(const boost::pr
     "**********************************************************************\n" <<
     tr("Your wallet has been generated!\n"
     "To start synchronizing with the daemon, use the \"refresh\" command.\n"
-    "Use the \"help\" command to see a simplified list of available commands.\n"
-    "Use the \"help_advanced\" command to see an advanced list of available commands.\n"
-    "Use \"help_advanced <command>\" to see a command's documentation.\n"
+    "Use the \"help\" command to see the list of available commands.\n"
+    "Use \"help <command>\" to see a command's documentation.\n"
     "Always use the \"exit\" command when closing monero-wallet-cli to save \n"
     "your current session's state. Otherwise, you might need to synchronize \n"
     "your wallet again (your wallet keys are NOT at risk in any case).\n")
@@ -5031,9 +5006,8 @@ boost::optional<epee::wipeable_string> simple_wallet::open_wallet(const boost::p
   }
   success_msg_writer() <<
     "**********************************************************************\n" <<
-    tr("Use the \"help\" command to see a simplified list of available commands.\n") <<
-    tr("Use the \"help_advanced\" command to see an advanced list of available commands.\n") <<
-    tr("Use \"help_advanced <command>\" to see a command's documentation.\n") <<
+    tr("Use the \"help\" command to see the list of available commands.\n") <<
+    tr("Use \"help <command>\" to see a command's documentation.\n") <<
     "**********************************************************************";
   return password;
 }
@@ -6251,7 +6225,7 @@ void simple_wallet::check_for_inactivity_lock(bool user)
     m_in_command = true;
     if (!user)
     {
-      const std::string speech = tr("I locked your Monero wallet to protect you while you were away\nsee \"help_advanced set\" to configure/disable");
+      const std::string speech = tr("I locked your Monero wallet to protect you while you were away\nsee \"help set\" to configure/disable");
       std::vector<std::pair<std::string, size_t>> lines = tools::split_string_by_width(speech, 45);
 
       size_t max_len = 0;
@@ -10364,6 +10338,14 @@ bool simple_wallet::user_confirms(const std::string &question)
    return !std::cin.eof() && command_line::is_yes(answer);
 }
 
+bool simple_wallet::user_confirms_auto_config()
+{
+  message_writer(console_color_red, true) << tr("WARNING: Using MMS auto-config mechanisms is not trustless");
+  message_writer() << tr("A malicious auto-config manager could send you info about own wallets instead of other signers' info");
+  message_writer() << tr("If in doubt do not use auto-config or at least compare configs using the \"mms config_checksum\" command");
+  return user_confirms("Accept the risks and continue?");
+}
+
 bool simple_wallet::get_number_from_arg(const std::string &arg, uint32_t &number, const uint32_t lower_bound, const uint32_t upper_bound)
 {
   bool valid = false;
@@ -10516,7 +10498,7 @@ void simple_wallet::show_message(const mms::message &m)
   case mms::message_type::additional_key_set:
   case mms::message_type::note:
     display_content = true;
-    ms.get_sanitized_message_text(m, sanitized_text);
+    ms.get_sanitized_text(m.content, 1000, sanitized_text);
     break;
   default:
     display_content = false;
@@ -10865,6 +10847,11 @@ void simple_wallet::mms_next(const std::vector<std::string> &args)
         {
           break;
         }
+        if (!user_confirms_auto_config())
+        {
+          message_writer() << tr("You can use the \"mms delete\" command to delete any unwanted message");
+          break;
+        }
       }
       ms.process_signer_config(state, m.content);
       ms.stop_auto_config();
@@ -11123,7 +11110,7 @@ void simple_wallet::mms_help(const std::vector<std::string> &args)
 {
   if (args.size() > 1)
   {
-    fail_msg_writer() << tr("Usage: help_advanced mms [<subcommand>]");
+    fail_msg_writer() << tr("Usage: mms help [<subcommand>]");
     return;
   }
   std::vector<std::string> help_args;
@@ -11191,6 +11178,18 @@ void simple_wallet::mms_start_auto_config(const std::vector<std::string> &args)
   list_signers(ms.get_all_signers());
 }
 
+void simple_wallet::mms_config_checksum(const std::vector<std::string> &args)
+{
+  if (args.size() != 0)
+  {
+    fail_msg_writer() << tr("Usage: mms config_checksum");
+    return;
+  }
+  mms::message_store& ms = m_wallet->get_message_store();
+  LOCK_IDLE_SCOPE();
+  message_writer() << ms.get_config_checksum();
+}
+
 void simple_wallet::mms_stop_auto_config(const std::vector<std::string> &args)
 {
   if (args.size() != 0)
@@ -11219,6 +11218,10 @@ void simple_wallet::mms_auto_config(const std::vector<std::string> &args)
   if (!ms.check_auto_config_token(args[0], adjusted_token))
   {
     fail_msg_writer() << tr("Invalid auto-config token");
+    return;
+  }
+  if (!user_confirms_auto_config())
+  {
     return;
   }
   mms::authorized_signer me = ms.get_signer(0);
@@ -11332,6 +11335,10 @@ bool simple_wallet::mms(const std::vector<std::string> &args)
     else if (sub_command == "start_auto_config")
     {
       mms_start_auto_config(mms_args);
+    }
+    else if (sub_command == "config_checksum")
+    {
+      mms_config_checksum(mms_args);
     }
     else if (sub_command == "stop_auto_config")
     {
