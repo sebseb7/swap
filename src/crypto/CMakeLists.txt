@@ -28,7 +28,7 @@
 
 set(crypto_sources
   cuckaroo/solver/mean.cpp
-  cuckaroo/cuckaroo29s.cpp
+  cuckaroo/cuckaroo29b.cpp
   cuckaroo/blake2b-ref.c
   aesb.c
   blake256.c
