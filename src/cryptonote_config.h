@@ -43,17 +43,17 @@
 #define CRYPTONOTE_PUBLIC_ADDRESS_TEXTBLOB_VER          0
 #define CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW            60
 #define CURRENT_TRANSACTION_VERSION                     2
-#define CURRENT_BLOCK_MAJOR_VERSION                     1
-#define CURRENT_BLOCK_MINOR_VERSION                     0
+#define CURRENT_BLOCK_MAJOR_VERSION                     9
+#define CURRENT_BLOCK_MINOR_VERSION                     9
 #define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT              60*60*2
 #define CRYPTONOTE_DEFAULT_TX_SPENDABLE_AGE             10
 
 #define BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW               60
 
 // MONEY_SUPPLY - total number coins to be generated
-#define MONEY_SUPPLY                                    ((uint64_t)(-1))
+#define MONEY_SUPPLY                                    ((uint64_t)(480000000000000000))
 #define EMISSION_SPEED_FACTOR_PER_MINUTE                (20)
-#define FINAL_SUBSIDY_PER_MINUTE                        ((uint64_t)300000000000) // 3 * pow(10, 11)
+#define FINAL_SUBSIDY_PER_MINUTE                        ((uint64_t)5000000000) // 3 * pow(10, 11)
 
 #define CRYPTONOTE_REWARD_BLOCKS_WINDOW                 100
 #define CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2    60000 //size of block (bytes) after which reward for block calculated using block size
@@ -62,7 +62,7 @@
 #define CRYPTONOTE_LONG_TERM_BLOCK_WEIGHT_WINDOW_SIZE   100000 // size in blocks of the long term block weight median window
 #define CRYPTONOTE_SHORT_TERM_BLOCK_WEIGHT_SURGE_FACTOR 50
 #define CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE          600
-#define CRYPTONOTE_DISPLAY_DECIMAL_POINT                12
+#define CRYPTONOTE_DISPLAY_DECIMAL_POINT                9
 // COIN - number of smallest units in one coin
 #define COIN                                            ((uint64_t)1000000000000) // pow(10, 12)
 
@@ -77,8 +77,8 @@
 #define ORPHANED_BLOCKS_MAX_COUNT                       100
 
 
-#define DIFFICULTY_TARGET_V2                            120  // seconds
-#define DIFFICULTY_TARGET_V1                            60  // seconds - before first fork
+#define DIFFICULTY_TARGET_V2                            15  // seconds
+#define DIFFICULTY_TARGET_V1                            15  // seconds - before first fork
 #define DIFFICULTY_WINDOW                               720 // blocks
 #define DIFFICULTY_LAG                                  15  // !!!
 #define DIFFICULTY_CUT                                  60  // timestamps to cut after sorting
@@ -149,7 +149,7 @@
 
 #define RPC_IP_FAILS_BEFORE_BLOCK                       3
 
-#define CRYPTONOTE_NAME                         "bitmonero"
+#define CRYPTONOTE_NAME                         "bittubecash"
 #define CRYPTONOTE_POOLDATA_FILENAME            "poolstate.bin"
 #define CRYPTONOTE_BLOCKCHAINDATA_FILENAME      "data.mdb"
 #define CRYPTONOTE_BLOCKCHAINDATA_LOCK_FILENAME "lock.mdb"
@@ -160,6 +160,7 @@
 #define THREAD_STACK_SIZE                       5 * 1024 * 1024
 
 #define HF_VERSION_DYNAMIC_FEE                  4
+#define HF_VERSION_DEV_REWARD                   12
 #define HF_VERSION_MIN_MIXIN_4                  6
 #define HF_VERSION_MIN_MIXIN_6                  7
 #define HF_VERSION_MIN_MIXIN_10                 8
@@ -197,17 +198,23 @@ namespace config
   uint64_t const DEFAULT_DUST_THRESHOLD = ((uint64_t)2000000000); // 2 * pow(10, 9)
   uint64_t const BASE_REWARD_CLAMP_THRESHOLD = ((uint64_t)100000000); // pow(10, 8)
 
-  uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 18;
-  uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 19;
-  uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 42;
-  uint16_t const P2P_DEFAULT_PORT = 18080;
-  uint16_t const RPC_DEFAULT_PORT = 18081;
-  uint16_t const ZMQ_RPC_DEFAULT_PORT = 18082;
+  uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 0xd1;
+  uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 0x404f;
+  uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 0x3750;
+  uint16_t const P2P_DEFAULT_PORT = 25181;
+  uint16_t const RPC_DEFAULT_PORT = 25182;
+  uint16_t const ZMQ_RPC_DEFAULT_PORT = 25183;
   boost::uuids::uuid const NETWORK_ID = { {
-      0x12 ,0x30, 0xF1, 0x71 , 0x61, 0x04 , 0x41, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x10
+      0xc5 ,0xf8, 0x71, 0xde , 0xf7, 0x9b , 0x1f, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x10
     } }; // Bender's nightmare
-  std::string const GENESIS_TX = "013c01ff0001ffffffffffff03029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+  std::string const GENESIS_TX = "023c01ff0001d0a7d7a9aa0302dd9522499dbd3d279e10437a0aa54820c40426e1af61230a3f05d24d579582f82101f7af51766389fbe2747d846eac16f497e670656b92f1208576fcec85cb063cc300";
   uint32_t const GENESIS_NONCE = 10000;
+  std::string const DEVELOPMENT_WALLET_ADDRESS = "bxdaNPkW77u6KYJuYNDSJpfocTXjVpZ7mMAsoNELySdnbAr8U6aMvnULosC456Kk7NRCAS2Xe7o14NF7bbPKyVta39KPYFia3";
+  std::string const MARKETING_WALLET_ADDRESS = "bxdEc4zm1g2ZQZkSwjYThuMJouTSfzL2xJXTC2o4q7Dq17sEcsMdwgRfNuBgg59TPCLJwCj4jJH7rT8bdKjx5p6Z35LJDknWU";
+  std::string const AIRTIME_WALLET_ADDRESS = "bxcfouydX4Q2jxw2Thx49bM7tmBiEhP7c8rUoXSVmYxxDpEqqSpBzdRe9WQDkg5LekBtX9W9XinTuG6ttKBtBnpT14KNegFD1"; // view key d6809b482464de15defbbb4127a94118c2ebf77997f45a496863a7266b1406a9
+  std::string const COMMUNITY_DEVS_WALLET_ADDRESS = "bxdpg2rivP4g1PzBsm9nq3YXU2V3kDcmogGPxeGvdsup4DBLzdHqW3bEmepzhzS6RPgye1MbiGVbq95UbZxPN19531E9YPMta";
+  std::string const COMMUNITY_MODS_WALLET_ADDRESS = "bxdKezUkPt4aci2PqZrEp7gqzkG3e7UC2R7zLn3Bd6dh1NhwRHPuXiB17uejH22dLh2qxj6mVVVZjTvGkbSSthbo2PeM429FW";
+  std::string const COMMUNITY_REF_WALLET_ADDRESS = "bxbuTE8eqwtXvQJEoNiDDPXoTExxuLu6igJsEbFuMQ4nBJgSYXHUR9u3PG26UrFZeYJ9d2uyPp28DgUm7SaXwA9u2uirzK4Ef";
 
   // Hash domain separators
   const char HASH_KEY_BULLETPROOF_EXPONENT[] = "bulletproof";
@@ -222,32 +229,44 @@ namespace config
 
   namespace testnet
   {
-    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 53;
-    uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 54;
-    uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 63;
-    uint16_t const P2P_DEFAULT_PORT = 28080;
-    uint16_t const RPC_DEFAULT_PORT = 28081;
-    uint16_t const ZMQ_RPC_DEFAULT_PORT = 28082;
+    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 0x9f;
+    uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 0x317a;
+    uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 0x699a;
+    uint16_t const P2P_DEFAULT_PORT = 25281;
+    uint16_t const RPC_DEFAULT_PORT = 25282;
+    uint16_t const ZMQ_RPC_DEFAULT_PORT = 25283;
     boost::uuids::uuid const NETWORK_ID = { {
-        0x12 ,0x30, 0xF1, 0x71 , 0x61, 0x04 , 0x41, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x11
+        0xd1 ,0xf8, 0x71, 0xde , 0xf7, 0x9b , 0x1f, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x10
       } }; // Bender's daydream
-    std::string const GENESIS_TX = "013c01ff0001ffffffffffff03029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+    std::string const GENESIS_TX = "023c01ff0001d0a7d7a9aa0302dd9522499dbd3d279e10437a0aa54820c40426e1af61230a3f05d24d579582f82101f7af51766389fbe2747d846eac16f497e670656b92f1208576fcec85cb063cc300";
     uint32_t const GENESIS_NONCE = 10001;
+    std::string const DEVELOPMENT_WALLET_ADDRESS = "TbYUtNwz3j9T6rkV9np1g86vKADp9q1VKDhtMkYpFe6g97sp969srp6V8TuEQ8VW33ekPGBfP4jcNHU73s9QHsx91t2fNYDCV";
+    std::string const MARKETING_WALLET_ADDRESS = "TbZqBYikYW6NWabAgohg88VLzu4Ch9LUxj8Bf9MwwR6M5ptsW8BwmXU7foHxpKMRF5TMN1SfVHLXf2dw9AbxCgbb2PLSf6NtE";
+    std::string const AIRTIME_WALLET_ADDRESS = "TbZm9Nkm7DhTg3UWb226mnSUm97Kw5cFCRyZHSnnixyzg6yXZNrwKz5cqFu1CCeUkcE1u6wHWtcZuck7rYLfEVqV1VQ8bnUQu";
+    std::string const COMMUNITY_DEVS_WALLET_ADDRESS = "TbYk7fqjiriMqT4yn64HenECtnpp2MgajZjPSHeegW9XdgZ2d8LCi2XCYYiZ19yzkw1pbg6CGqh5mbzv7ern2zBs1hcKYuNF3";
+    std::string const COMMUNITY_MODS_WALLET_ADDRESS = "TbZKz7Pfoir6FsLCeYfxSQPvQDWJvqRGreqfrR4EtEgFjortkugKNFSQuScdgMa8dy7S7ZdKJESkPAeRUcpvY71f2UbsYWtdT";
+    std::string const COMMUNITY_REF_WALLET_ADDRESS = "TbaLntZS7swbdAa6hxnyD9ihKQ8vHCbbkaPB5BG65ysCSYfC5yVB96zDYQWmzVyZYS6XVBCBfPxwfCGjtnvuWi8J1Kwj4zBK1";
   }
 
   namespace stagenet
   {
-    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 24;
-    uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 25;
-    uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 36;
-    uint16_t const P2P_DEFAULT_PORT = 38080;
-    uint16_t const RPC_DEFAULT_PORT = 38081;
-    uint16_t const ZMQ_RPC_DEFAULT_PORT = 38082;
+    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 0x99;
+    uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 0x23fa;
+    uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 0x5c1a;
+    uint16_t const P2P_DEFAULT_PORT = 25381;
+    uint16_t const RPC_DEFAULT_PORT = 25382;
+    uint16_t const ZMQ_RPC_DEFAULT_PORT = 25383;
     boost::uuids::uuid const NETWORK_ID = { {
-        0x12 ,0x30, 0xF1, 0x71 , 0x61, 0x04 , 0x41, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x12
+        0x70 ,0xf8, 0x71, 0xde , 0xf7, 0x9b , 0x1f, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x10
       } }; // Bender's daydream
-    std::string const GENESIS_TX = "013c01ff0001ffffffffffff0302df5d56da0c7d643ddd1ce61901c7bdc5fb1738bfe39fbe69c28a3a7032729c0f2101168d0c4ca86fb55a4cf6a36d31431be1c53a3bd7411bb24e8832410289fa6f3b";
+    std::string const GENESIS_TX = "023c01ff0001d0a7d7a9aa0302dd9522499dbd3d279e10437a0aa54820c40426e1af61230a3f05d24d579582f82101f7af51766389fbe2747d846eac16f497e670656b92f1208576fcec85cb063cc300";
     uint32_t const GENESIS_NONCE = 10002;
+    std::string const DEVELOPMENT_WALLET_ADDRESS = "SbMYCXHL3KVjWmz8f1aas3ZNCCmPgdEXWUViN6Ms1nmpMUKoWeQGQpDBse1v1w9C7z5pVP89zStbrYHkdu1nPqBf1ALGumYEd";
+    std::string const MARKETING_WALLET_ADDRESS = "SbLD4FpSxZXdXZQtPq39gaAefzbCWf1UmUkRuCefRtdPGUzMjYM6p6TcwHoFEH32Ru2PxyfCigFTU7941pbJ8A5F29BqsJY3i";
+    std::string const AIRTIME_WALLET_ADDRESS = "SbM84kygYTTPQChpEX4PVTaanFHMhSjJkW6R8JyAgeDURjzKTzMnGmZgdbjcPeRKCz7jEvcjPSnP7hf8bLVqZda11mFgT6EQA";
+    std::string const COMMUNITY_DEVS_WALLET_ADDRESS = "SbLs2L3pmo5XX76Uc9MyS798LMkvPfmW5bgA3Ge9wrXJ1P4C9xVwz7wcpCqS5C3bahJataWX34x7CEZoSpoxCppd2KxzsxT9D";
+    std::string const COMMUNITY_MODS_WALLET_ADDRESS = "SbLaZaPq1DW5tc4f7YA8PgZdFdkABDWZk17Hk9PujgHKXAK4mHgabrLGPnnRgbybNsZ1fEch6UE9xfB7hJ6TkTqp2TKYnNGGw";
+    std::string const COMMUNITY_REF_WALLET_ADDRESS = "SbMXjwpvwQEB441dgnsWViQeXW8gNvNMhiH8b9sBWkZbboxgE73Y9AY3zoX7N2ZWbX5uCGjLjdbXyikbHnF5zDwf2h1XMvaaN";
   }
 }
 
@@ -318,3 +337,31 @@ namespace cryptonote
     }
   };
 }
+
+/*
+TbYUtNwz3j9T6rkV9np1g86vKADp9q1VKDhtMkYpFe6g97sp969srp6V8TuEQ8VW33ekPGBfP4jcNHU73s9QHsx91t2fNYDCV
+never fossil wedge hashing cavernous dagger tribal foxes itself asylum piloted puddle runway welders gemstone sarcasm gimmick metro wagtail cogs ammo never stunning tilt tribal
+TbZqBYikYW6NWabAgohg88VLzu4Ch9LUxj8Bf9MwwR6M5ptsW8BwmXU7foHxpKMRF5TMN1SfVHLXf2dw9AbxCgbb2PLSf6NtE
+pistons rhino muddy roles dilute uneven hijack southern kiosk syndrome problems pamphlet cabin terminal nowhere voted space beware erected wetsuit total lectures yahoo ajar erected
+TbZm9Nkm7DhTg3UWb226mnSUm97Kw5cFCRyZHSnnixyzg6yXZNrwKz5cqFu1CCeUkcE1u6wHWtcZuck7rYLfEVqV1VQ8bnUQu
+visited sorry etched lottery cowl uphill sowed erected yoyo launching bakery trolling possible fonts motherly poaching enjoy pixels hence athlete boldly upbeat elite emails elite
+TbYk7fqjiriMqT4yn64HenECtnpp2MgajZjPSHeegW9XdgZ2d8LCi2XCYYiZ19yzkw1pbg6CGqh5mbzv7ern2zBs1hcKYuNF3
+sunken furnished kidneys tossed suffice acoustic uptight giant victim stick distance stunning pixels hectare apex ought ankle slug mowing tobacco poetry imbalance biscuit cider acoustic
+TbZKz7Pfoir6FsLCeYfxSQPvQDWJvqRGreqfrR4EtEgFjortkugKNFSQuScdgMa8dy7S7ZdKJESkPAeRUcpvY71f2UbsYWtdT
+voted wizard cistern lush geometry younger buying civilian extra acquire answers fetches tubes dagger himself oscar coal merger duke putty unusual goldfish trolling vary oscar
+TbaLntZS7swbdAa6hxnyD9ihKQ8vHCbbkaPB5BG65ysCSYfC5yVB96zDYQWmzVyZYS6XVBCBfPxwfCGjtnvuWi8J1Kwj4zBK1
+lexicon fainted inline wedge nineteen goodbye cool voice poker tinted poverty avatar kennel wayside yacht dusted happens hyper rhino invoke sleepless kitchens basin citadel happens
+
+SbMYCXHL3KVjWmz8f1aas3ZNCCmPgdEXWUViN6Ms1nmpMUKoWeQGQpDBse1v1w9C7z5pVP89zStbrYHkdu1nPqBf1ALGumYEd
+lyrics inmate alumni syringe july noted tomorrow echo owner ocean frying friendly sowed dogs tulips toilet echo dozen tinted jeers cogs axes velvet website noted
+SbLD4FpSxZXdXZQtPq39gaAefzbCWf1UmUkRuCefRtdPGUzMjYM6p6TcwHoFEH32Ru2PxyfCigFTU7941pbJ8A5F29BqsJY3i
+wrong seventh hedgehog gusts waffle unopened mops gather vary yoga woven noises gossip kettle psychic vigilant vibrate buzzer vitals huge faxed double hawk hesitate noises
+SbM84kygYTTPQChpEX4PVTaanFHMhSjJkW6R8JyAgeDURjzKTzMnGmZgdbjcPeRKCz7jEvcjPSnP7hf8bLVqZda11mFgT6EQA
+gnaw nasty input ceiling himself rhino alpine vein wiring acidic exquisite grunt jackets else five mohawk leopard cool meant unwind dubbed aimless strained tell aimless
+SbLs2L3pmo5XX76Uc9MyS798LMkvPfmW5bgA3Ge9wrXJ1P4C9xVwz7wcpCqS5C3bahJataWX34x7CEZoSpoxCppd2KxzsxT9D
+language daytime kangaroo january liquid observant exquisite vector maximum anybody network ridges oust nurse himself dauntless eagle talent unlikely waveform drinks relic guys hashing guys
+SbLaZaPq1DW5tc4f7YA8PgZdFdkABDWZk17Hk9PujgHKXAK4mHgabrLGPnnRgbybNsZ1fEch6UE9xfB7hJ6TkTqp2TKYnNGGw
+quote hence rhythm oilfield cottage total omega comb zodiac sixteen irritate rigid tolerant gumball smash gotten loyal gigantic enlist imbalance cuisine unzip fazed fugitive gigantic
+SbMXjwpvwQEB441dgnsWViQeXW8gNvNMhiH8b9sBWkZbboxgE73Y9AY3zoX7N2ZWbX5uCGjLjdbXyikbHnF5zDwf2h1XMvaaN
+utility ungainly business cinema toolbox hobby ruffled scuba foamy habitat rumble until nail mews nineteen onboard drying hubcaps timber wetsuit reinvest dozen initiate jeopardy utility
+*/

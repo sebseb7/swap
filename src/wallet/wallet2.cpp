@@ -156,7 +156,7 @@ namespace
     boost::filesystem::path dir = tools::get_default_data_dir();
     // remove .bitmonero, replace with .shared-ringdb
     dir = dir.remove_filename();
-    dir /= ".shared-ringdb";
+    dir /= ".bittubecash/.ringdb";
     return dir.string();
   }
 
@@ -7378,7 +7378,7 @@ int wallet2::get_fee_algorithm()
 uint64_t wallet2::get_min_ring_size()
 {
   if (use_fork_rules(8, 10))
-    return 11;
+    return 3;
   if (use_fork_rules(7, 10))
     return 7;
   if (use_fork_rules(6, 10))
@@ -7391,7 +7391,7 @@ uint64_t wallet2::get_min_ring_size()
 uint64_t wallet2::get_max_ring_size()
 {
   if (use_fork_rules(8, 10))
-    return 11;
+    return 3;
   return 0;
 }
 //------------------------------------------------------------------------------------------------------------------------------

@@ -972,7 +972,6 @@ namespace cryptonote
   {
     switch (decimal_point)
     {
-      case 12:
       case 9:
       case 6:
       case 3:
@@ -995,16 +994,14 @@ namespace cryptonote
       decimal_point = default_decimal_point;
     switch (decimal_point)
     {
-      case 12:
-        return "monero";
       case 9:
-        return "millinero";
+        return "monero";
       case 6:
-        return "micronero";
+        return "millinero";
       case 3:
-        return "nanonero";
+        return "micronero";
       case 0:
-        return "piconero";
+        return "nanonero";
       default:
         ASSERT_MES_AND_THROW("Invalid decimal point specification: " << decimal_point);
     }
