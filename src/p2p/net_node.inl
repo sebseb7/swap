@@ -607,6 +607,7 @@ namespace nodetool
     }
     else if (nettype == cryptonote::STAGENET)
     {
+      full_addrs.insert("139.162.211.9:25381");
     }
     else if (nettype == cryptonote::FAKECHAIN)
     {
